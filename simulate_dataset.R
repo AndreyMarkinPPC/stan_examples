@@ -134,3 +134,32 @@ video_dataset_reg <- video_dataset_reg %>%
   ungroup() %>% 
   mutate(ipm_diff = ipm - avg_ipm) %>% 
   select(ipm_diff, ipm, avg_ipm, everything())
+
+# convert to dimensions to ints
+video_dataset_reg <- video_dataset_reg %>% 
+  mutate(app_id = as.integer(as.factor(app)),
+         app_category_id = as.integer(as.factor(app_category)),
+         orientation_id = as.integer(as.factor(orientation)),
+         network_id = as.integer(as.factor(network)),
+         type_id = as.integer(as.factor(type)),
+         country_id = as.integer(as.factor(country))
+         ) 
+
+# prepare list for stan
+data_stan_list <- list(
+  N = nrow(video_dataset_reg), 
+  N_apps = n_apps, 
+  N_types = n_campaign_types, 
+  N_countries = n_countries, 
+  N_networks = n_networks, 
+  N_orientations = n_video_orientations,
+  app_ids = video_dataset_reg$app_id,
+  country_ids = video_dataset_reg$country_id, 
+  type_ids = video_dataset_reg$type_id,
+  network_ids = video_dataset_reg$network_id, 
+  orientation_ids = video_dataset_reg$orientation_id,
+  K_features = n_features + 1,
+  X_features = cbind(1, video_dataset_reg[, 13:22]), 
+  Z_app = cbind(1, video_dataset_reg[, 13:22]), 
+  y = video_dataset_reg$ipm_diff
+)
