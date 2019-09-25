@@ -22,8 +22,8 @@ data_stan_list <- list(
   network_ids = video_dataset_reg$network_id, 
   orientation_ids = video_dataset_reg$orientation_id,
   K_features = n_features + 1,
-  X_features = cbind(1, video_dataset_reg[, 11:20]), 
-  Z_app = cbind(1, video_dataset_reg[, 11:20]), 
+  X_features = cbind(1, video_dataset_reg[, 13:20]), 
+  Z_app = cbind(1, video_dataset_reg[, 13:20]), 
   y = video_dataset_reg$ipm_diff
 )
 
